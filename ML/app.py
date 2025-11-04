@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, Response
 import os, uuid, matplotlib.pyplot as plt
 from werkzeug.utils import secure_filename
-from ai_video_analyzer import analyze_video
 from threading import Thread
 import queue
 from flask_cors import CORS
 
+from core.analyzer import analyze_video
 
 UPLOAD_FOLDER = "static/uploads"
 RESULT_FOLDER = "static/results"

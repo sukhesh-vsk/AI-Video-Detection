@@ -1,8 +1,6 @@
-import cv2
+import cv2, os
 import numpy as np
 import pywt
-import os
-import matplotlib.pyplot as plt
 
 # ---------------------------
 # Feature Extraction Function
@@ -56,98 +54,28 @@ def classify_frame(features):
     else:
         return "Real"
 
+
 # ---------------------------
-# Process Video & Visualize
+# Extract Frames
 # ---------------------------
-def analyze_video(video_path, frame_skip=10):
+def extract_frames(video_path, output_dir, frame_skip=10):
     cap = cv2.VideoCapture(video_path)
-
-    results = []
-    features_list = []
-    frame_idx_list = []
-
+    os.makedirs(output_dir, exist_ok=True)
     frame_idx = 0
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    count = 0
 
     while True:
         ret, frame = cap.read()
         if not ret:
             break
-
         if frame_idx % frame_skip == 0:
-            feats = noise_features(frame)
-            label = classify_frame(feats)
-
-            results.append(label)
-            features_list.append(feats)
-            frame_idx_list.append(frame_idx)
-
-            print(f"Frame {frame_idx}: {label}")
-            yield f"Frame {frame_idx}: {label}"  # log output
-
+            frame_path = os.path.join(output_dir, f"frame_{count}.jpg")
+            cv2.imwrite(frame_path, frame)
+            count += 1
         frame_idx += 1
-
     cap.release()
 
-    ai_count = results.count("AI")
-    real_count = results.count("Real")
-    confidence = ai_count / len(results) if results else 0
-    final_label = "AI Generated" if confidence > 0.6 else "Real"
 
-    residuals = [f["residual_variance"] for f in features_list]
-    wavelets = [f["wavelet_energy"] for f in features_list]
-    fft_ratios = [f["fft_high_ratio"] for f in features_list]
-    colors = ['red' if lbl == "AI" else 'green' for lbl in results]
-
-    fig, axes = plt.subplots(3, 1, figsize=(12, 9), sharex=True)
-
-    axes[0].scatter(frame_idx_list, residuals, c=colors, s=40)
-    axes[0].set_ylabel("Residual Variance")
-    axes[0].set_title("Residual Noise per Frame")
-
-    axes[1].scatter(frame_idx_list, wavelets, c=colors, s=40)
-    axes[1].set_ylabel("Wavelet Energy")
-    axes[1].set_title("Wavelet Detail Energy per Frame")
-
-    axes[2].scatter(frame_idx_list, fft_ratios, c=colors, s=40)
-    axes[2].set_ylabel("FFT High-Freq Ratio")
-    axes[2].set_xlabel("Frame Index")
-    axes[2].set_title("High-Frequency Ratio per Frame")
-
-    axes[0].scatter([], [], c='red', label='AI')
-    axes[0].scatter([], [], c='green', label='Real')
-    axes[0].legend(loc='upper right')
-
-    plt.tight_layout()
-
-    print({
-        "final_label": final_label,
-        "confidence": confidence,
-        "ai_count": ai_count,
-        "real_count": real_count,
-        "plot": fig
-    })
-
-    yield {
-        "final_label": final_label,
-        "confidence": confidence,
-        "ai_count": ai_count,
-        "real_count": real_count,
-        "plot": fig
-    }
-    
-# ---------------------------
-# Run on a Video
-# ---------------------------
-if __name__ == "__main__":
-    video_path = "../Datasets/ai/ai (1).mp4"
-    final_label, confidence, ai_count, real_count = analyze_video(video_path)
-
-    print("\n=== Final Decision ===")
-    print(f"Video: {video_path}")
-    print(f"Result: {final_label}")
-    print(f"AI Frames: {ai_count}, Real Frames: {real_count}")
-    print(f"Confidence: {confidence*100:.2f}%")
 
 
 ################################################
