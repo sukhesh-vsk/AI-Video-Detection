@@ -1,1 +1,36 @@
 Datasets/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints
+
+# Logs & cache
+*.log
+.cache/
+*.tmp
+*.pkl
+*.h5
+
+# Model files
+models/
+checkpoints/
+outputs/
+
+# Next.js / Frontend
+node_modules/
+.next/
+dist/
+out/
+.env.local
+
+# System
+*.swp
+Thumbs.db
