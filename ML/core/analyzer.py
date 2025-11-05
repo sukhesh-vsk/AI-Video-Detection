@@ -3,12 +3,12 @@ import numpy as np
 import pywt
 import os
 import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-
+import uuid
 from .utils import noise_features
 from .vit_classifier import classify_frame_vit
 
-matplotlib.use("Agg")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -76,15 +76,15 @@ def analyze_video(video_path, frame_skip=10):
     axes[2].plot(frame_idx_list, fft_ratios, c='white')
     axes[2].set_ylabel("FFT HF Ratio")
     axes[2].set_xlabel("Frame Index")
-
-
+    
     plt.tight_layout()
 
     output_dir = os.path.join(BASE_DIR, "../outputs")
     os.makedirs(output_dir, exist_ok=True)
 
-    plot_filename = f"plot_abcsd.png"
-    fig_path = os.path.join(output_dir, plot_filename)
+    plot_filename = f"{uuid.uuid4().hex}.png"
+    # fig_path = os.path.join(output_dir, plot_filename)
+    fig_path = os.path.join("/home/vsk/Code/AI-Video-Detection/frontend/public", plot_filename)
 
     plt.savefig(fig_path)  # ✅ SAFE now
     plt.close(fig)         # ✅ Required to prevent crash
@@ -94,7 +94,7 @@ def analyze_video(video_path, frame_skip=10):
         "confidence": confidence,
         "ai_count": ai_count,
         "real_count": real_count,
-        "plot": fig_path
+        "plot": plot_filename
     }
 
     yield result_dict

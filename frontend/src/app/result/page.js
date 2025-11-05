@@ -63,9 +63,12 @@ export default function ResultPage() {
         </div>
 
         {/* Plot Image */}
+        {
+          console.log("Plot: ", result.plot_image)
+        }
         <div className="mt-6 w-full flex justify-center">
           <img
-            src={`http://localhost:5000${result.plot_image}`}
+            src={result.plot_image}
             alt="Result Plot"
             className="rounded-xl shadow-lg w-full md:w-2/3"
           />

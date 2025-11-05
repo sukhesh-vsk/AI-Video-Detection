@@ -12,7 +12,7 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 # Load model once for inference
 model = ViTForImageClassification.from_pretrained(MODEL_DIR)
 processor = ViTImageProcessor.from_pretrained("google/vit-base-patch16-224")
-label_map = {0: "Real", 1: "AI"}
+label_map = {1: "Real", 0: "AI"}
 
 def classify_frame_vit(frame):
     img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
