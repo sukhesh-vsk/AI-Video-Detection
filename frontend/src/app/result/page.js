@@ -34,7 +34,7 @@ export default function ResultPage() {
       <div className="w-full max-w-4xl bg-gray-900 rounded-3xl shadow-2xl p-8 mt-8">
         <h2 className="text-4xl font-bold text-center text-blue-400 mb-4">Analysis Result</h2>
 
-        <div className="flex flex-col md:flex-row items-center justify-around gap-6 mt-6">
+        <div className="flex flex-col md:flex-row items-center justify-around gap-4 mt-6">
             {/* Stats */}
             <div className="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col gap-3 w-full md:w-1/3">
             <p className={`text-lg ${result.label === "AI Generated" ? "text-red-500" : "text-green-400"}`}>
@@ -42,6 +42,10 @@ export default function ResultPage() {
             </p>
             <p className={`text-lg ${getConfidenceColor(result.confidence)}`}>
               <strong className="text-blue-400">Confidence:</strong> {result.confidence}%
+              <br />
+              <span className="italic text-sm opacity-80 text-gray-500 align-justify">
+                (Probability this video is AI-generated)
+              </span>
             </p>
             <p className="text-lg text-white">
               <strong className="text-blue-400">AI Frames:</strong> {result.ai_count}
@@ -63,12 +67,9 @@ export default function ResultPage() {
         </div>
 
         {/* Plot Image */}
-        {
-          console.log("Plot: ", result.plot_image)
-        }
         <div className="mt-6 w-full flex justify-center">
           <img
-            src={result.plot_image}
+            src={`/plots/${result.plot_image}`}
             alt="Result Plot"
             className="rounded-xl shadow-lg w-full md:w-2/3"
           />

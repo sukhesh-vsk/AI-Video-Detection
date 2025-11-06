@@ -67,16 +67,23 @@ def analyze_video(video_path, frame_skip=10):
 
     fig, axes = plt.subplots(3, 1, figsize=(12, 9), sharex=True)
 
-    axes[0].plot(frame_idx_list, residuals, c='cyan')
+    axes[0].scatter(frame_idx_list, residuals, c=colors, s=40)
     axes[0].set_ylabel("Residual Variance")
+    axes[0].set_title("Residual Noise per Frame")
 
-    axes[1].plot(frame_idx_list, wavelets, c='yellow')
+    axes[1].scatter(frame_idx_list, wavelets, c=colors, s=40)
     axes[1].set_ylabel("Wavelet Energy")
+    axes[1].set_title("Wavelet Detail Energy per Frame")
 
-    axes[2].plot(frame_idx_list, fft_ratios, c='white')
-    axes[2].set_ylabel("FFT HF Ratio")
+    axes[2].scatter(frame_idx_list, fft_ratios, c=colors, s=40)
+    axes[2].set_ylabel("FFT High-Freq Ratio")
     axes[2].set_xlabel("Frame Index")
-    
+    axes[2].set_title("High-Frequency Ratio per Frame")
+
+    axes[0].scatter([], [], c='red', label='AI')
+    axes[0].scatter([], [], c='green', label='Real')
+    axes[0].legend(loc='upper right')
+
     plt.tight_layout()
 
     output_dir = os.path.join(BASE_DIR, "../outputs")
@@ -84,7 +91,7 @@ def analyze_video(video_path, frame_skip=10):
 
     plot_filename = f"{uuid.uuid4().hex}.png"
     # fig_path = os.path.join(output_dir, plot_filename)
-    fig_path = os.path.join("/home/vsk/Code/AI-Video-Detection/frontend/public", plot_filename)
+    fig_path = os.path.join("/home/vsk/Code/AI-Video-Detection/frontend/public/plots", plot_filename)
 
     plt.savefig(fig_path)  # ✅ SAFE now
     plt.close(fig)         # ✅ Required to prevent crash
