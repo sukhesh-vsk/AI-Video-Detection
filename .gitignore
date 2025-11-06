@@ -1,4 +1,12 @@
+# data files
 Datasets/
+frames_dataset/
+static/
+
+# Model files
+models/
+checkpoints/
+outputs/
 
 # Python
 __pycache__/
@@ -19,10 +27,6 @@ venv/
 *.pkl
 *.h5
 
-# Model files
-models/
-checkpoints/
-outputs/
 
 # Next.js / Frontend
 node_modules/
