@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import uuid
 from .utils import noise_features
 from .vit_classifier import classify_frame_vit
+import time
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -57,7 +58,7 @@ def analyze_video(video_path, frame_skip=10):
     real_count = sum(lbl in real_labels for lbl in results)
 
     confidence = ai_count / len(results) if results else 0
-    final_label = ai_labels[0].upper() if confidence > 0.6 else real_labels[0].upper()
+    final_label = ai_labels[0].upper() if confidence > 0.5 else real_labels[0].upper()
 
     # ✅ Visualization Data
     residuals = [f["residual_variance"] for f in features_list]
@@ -94,6 +95,7 @@ def analyze_video(video_path, frame_skip=10):
     fig_path = os.path.join("/home/vsk/Code/AI-Video-Detection/frontend/public/plots", plot_filename)
 
     plt.savefig(fig_path)  # ✅ SAFE now
+    time.sleep(2)
     plt.close(fig)         # ✅ Required to prevent crash
 
     result_dict = {

@@ -24,6 +24,8 @@ log_queue = queue.Queue()
 last_result = {}
 processing = False
 
+print("Before")
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -116,6 +118,8 @@ def logs():
     return Response(generate(), mimetype="text/event-stream")
 
 if __name__ == "__main__":
+    print("Inside")
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     os.makedirs(RESULT_FOLDER, exist_ok=True)
+    print("After")
     app.run(debug=True, threaded=True)
