@@ -51,20 +51,25 @@ def analyze_video(video_path, frame_skip=10):
     cap.release()
 
     # ✅ Dynamic label handling
-    ai_labels = [lbl for lbl in set(results) if "ai" in lbl.lower()]
-    real_labels = [lbl for lbl in set(results) if "real" in lbl.lower()]
+    # ai_labels = [lbl for lbl in set(results) if "ai" in lbl.lower()]
+    # real_labels = [lbl for lbl in set(results) if "real" in lbl.lower()]
 
-    ai_count = sum(lbl in ai_labels for lbl in results)
-    real_count = sum(lbl in real_labels for lbl in results)
+    # ai_count = sum(lbl in ai_labels for lbl in results)
+    # real_count = sum(lbl in real_labels for lbl in results)
 
-    confidence = ai_count / len(results) if results else 0
-    final_label = ai_labels[0].upper() if confidence > 0.5 else real_labels[0].upper()
+    # confidence = ai_count / len(results) if results else 0
+    # final_label = ai_labels[0].upper() if confidence > 0.5 else real_labels[0].upper()
+    ai_count = results.count("AI")
+    real_count = results.count("Real")
+
+    final_label = "AI" if ai_count > real_count else "Real"
+    confidence = ai_count / len(results)
 
     # ✅ Visualization Data
     residuals = [f["residual_variance"] for f in features_list]
     wavelets = [f["wavelet_energy"] for f in features_list]
     fft_ratios = [f["fft_high_ratio"] for f in features_list]
-    colors = ['red' if lbl in ai_labels else 'green' for lbl in results]
+    colors = ['red' if lbl in results else 'green' for lbl in results]
 
     fig, axes = plt.subplots(3, 1, figsize=(12, 9), sharex=True)
 

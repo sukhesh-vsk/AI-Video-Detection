@@ -22,4 +22,7 @@ def classify_frame_vit(frame):
         outputs = model(**inputs)
 
     pred = torch.argmax(outputs.logits, dim=1).item()
+    probs = torch.softmax(outputs.logits, dim=1)
+    confidence = probs.max().item()
+    print("CONFIDENCE : ", confidence)
     return label_map[pred]

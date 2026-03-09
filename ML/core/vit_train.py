@@ -44,7 +44,7 @@ processor = ViTImageProcessor.from_pretrained(
 def transform(example_batch):
     # print(f"Example: {example_batch}")
     images = example_batch["image"]
-    inputs = processor(images, return_tensors="pt")
+    inputs = processor(images=images, return_tensors="pt")
     example_batch["pixel_values"] = inputs["pixel_values"]
     return example_batch
 
@@ -75,7 +75,7 @@ def compute_metrics(pred):
 training_args = TrainingArguments(
     output_dir=MODEL_DIR,
     per_device_train_batch_size=8,
-    num_train_epochs=3,
+    num_train_epochs=8,
     eval_strategy="epoch",
     save_strategy="epoch",
     learning_rate=2e-5,
